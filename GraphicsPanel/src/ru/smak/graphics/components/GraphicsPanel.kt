@@ -61,9 +61,11 @@ class GraphicsPanel : JPanel(), MouseListener, MouseMotionListener {
         g2?.background = Color.WHITE
         g2?.clearRect(0, 0, plane.realWidth, plane.realHeight)
         super.paint(g)
-        paintersCollection.forEach { p ->
-            g2?.let {
-                p.paint(g2)
+        synchronized(paintersCollection) {
+            paintersCollection.forEach { p ->
+                g2?.let {
+                    p.paint(g2)
+                }
             }
         }
         synchronized(g) {

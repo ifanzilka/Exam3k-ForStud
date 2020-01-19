@@ -39,8 +39,8 @@ class MainWindow : JFrame("Экзамен: КТ, 3 курс") {
         val plane = CartesianScreenPlane(
             mainPanel.width,
             mainPanel.height,
-            -2.0, 2.0,
-            -2.0, 2.0
+            -3.5, 3.5,
+            -3.5, 3.5
         )
         val cartesianP = CartesianPainter(plane)
         mainPanel.addPainter(cartesianP)
