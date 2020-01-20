@@ -9,7 +9,9 @@ import java.awt.Dimension
 import javax.swing.GroupLayout
 import javax.swing.JFrame
 import javax.swing.WindowConstants
-
+import EquationPainter
+import kotlin.math.sin
+import EquationParam
 class MainWindow : JFrame("Экзамен: КТ, 3 курс") {
 
     /**
@@ -46,6 +48,16 @@ class MainWindow : JFrame("Экзамен: КТ, 3 курс") {
         mainPanel.addPainter(cartesianP)
         val gridP = GridPainter(plane)
         mainPanel.addPainter(gridP, 0)
+        val funk = { x:Double -> x * sin (1.0/x) }
+        val x = {t:Double -> 3*t/(1+t*t)}
+        val y = {t:Double -> t*t/(1+t*t)}
+
+        val a= EquationPainter(plane,funk)
+        mainPanel.addPainter(a,0)
+        val b= EquationParam(plane,x,y)
+       mainPanel.addPainter(b,0)
+
+
         /**
          * Добавление указателя в позицию мыши
          */

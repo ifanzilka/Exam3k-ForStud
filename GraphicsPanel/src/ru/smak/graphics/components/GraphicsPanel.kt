@@ -7,6 +7,7 @@ import java.awt.Graphics
 import java.awt.event.*
 import java.awt.image.BufferedImage
 import javax.swing.JPanel
+import javax.swing.SwingWorker
 
 class GraphicsPanel : JPanel(), MouseListener, MouseMotionListener {
 
@@ -23,8 +24,18 @@ class GraphicsPanel : JPanel(), MouseListener, MouseMotionListener {
      */
     val paintersCollection: MutableList<APainter> = mutableListOf()
 
+    inner class BackgroundProcess : SwingWorker<Unit, Unit>() {
+        override fun doInBackground() {
+            paintersCollection[0].paint(this@GraphicsPanel.graphics)
+            paintersCollection[1].paint(this@GraphicsPanel.graphics)
+        }
+
+    }
+
+    private var bgProcess = BackgroundProcess()
+
     init {
-        background = Color.WHITE
+        background = Color.RED
         addComponentListener(object : ComponentAdapter() {
             override fun componentResized(e: ComponentEvent?) {
                 paintersCollection.forEach {
@@ -61,16 +72,25 @@ class GraphicsPanel : JPanel(), MouseListener, MouseMotionListener {
         g2?.background = Color.WHITE
         g2?.clearRect(0, 0, plane.realWidth, plane.realHeight)
         super.paint(g)
+
         synchronized(paintersCollection) {
             paintersCollection.forEach { p ->
                 g2?.let {
-                    p.paint(g2)
+                    if (paintersCollection.indexOf(p) != 0&&paintersCollection.indexOf(p) != 1) {
+                        p.paint(g2)
+                    }
                 }
             }
         }
+
+
+
         synchronized(g) {
             g.drawImage(bImage, 0, 0, null)
         }
+        if (!bgProcess.isDone) bgProcess.cancel(true)
+        bgProcess = BackgroundProcess()
+        bgProcess.execute()
     }
 
     val mouseReleasedListeners = mutableListOf<(MouseEvent?) -> Unit>()

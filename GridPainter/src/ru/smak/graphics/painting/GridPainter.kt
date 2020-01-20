@@ -6,6 +6,7 @@ import java.awt.Color
 import java.awt.Graphics
 import java.awt.Graphics2D
 import kotlin.math.round
+import EquationPainter
 
 enum class PlaneAxisType {
     X, Y
@@ -50,6 +51,8 @@ class GridPainter(override val plane: CartesianScreenPlane) : APainter() {
             }
             i = round((i + step) * 10.0) / 10.0
         }
+
+
     }
 
     private fun getStep(axis: PlaneAxisType, minValue: Double): Double {
@@ -68,4 +71,5 @@ class GridPainter(override val plane: CartesianScreenPlane) : APainter() {
             else -> 0.1
         }
     }
+
 }
